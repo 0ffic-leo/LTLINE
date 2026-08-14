@@ -1,92 +1,88 @@
-# LTLINE — Corporate Documentation Suite
+# LTLINE — Sistemi i Dokumentacionit Korporativ
 
-**LTLINE Foundation Pack · Version 1.0.0**
+**LTLINE Foundation Pack · Versioni 1.0.0**
 
-LTLINE is a technical, engineering and project-development brand focused on ventilation, climate systems, modular construction, villas, PIR panel solutions and related technical services.
+LTLINE është markë teknike dhe projektuese e fokusuar në ventilim, sisteme klimatizimi/HVAC, ndërtime modulare, vila, panele PIR dhe shërbime teknike të lidhura.
 
-This repository is the central source of truth for LTLINE's corporate, operational, technical and business documentation.
+Ky repository është burimi qendror i kontrolluar për dokumentacionin korporativ, operativ, teknik dhe të biznesit të LTLINE.
 
-## Foundation Scope
+## Gjuha e dokumentacionit
 
-The Foundation Pack establishes the base documentation architecture for:
+**Gjuha kryesore zyrtare: Shqip.**
 
-- Corporate identity and company profile
-- Business model and strategic planning
-- Products and technical systems
-- Standard Operating Procedures (SOPs)
-- Quality, health, safety and environmental principles
-- Procurement and supplier management
-- Project management and execution
-- Sales, customer service and after-sales processes
-- Financial planning and reporting frameworks
-- Export readiness and future international expansion
-- Document control and revision management
+Versionet në anglisht ruhen si bazë/variant ndërkombëtar dhe do të përdoren për partnerë, furnitorë dhe zhvillimin e eksporteve kur të jetë e nevojshme.
 
-## Repository Structure
+Versionet në shqip ndodhen te `docs/sq/`.
+
+## Fusha e Foundation Pack
+
+- Identiteti dhe profili i kompanisë
+- Modeli i biznesit dhe planifikimi strategjik
+- Produktet dhe sistemet teknike
+- Procedurat Standarde të Operimit (SOP)
+- Cilësia, Shëndeti, Siguria dhe Mjedisi
+- Prokurimi dhe menaxhimi i furnitorëve
+- Menaxhimi dhe zbatimi i projekteve
+- Shitjet, klientët dhe shërbimi pas shitjes
+- Planifikimi dhe kontrolli financiar
+- Përgatitja për eksport
+- Kontrolli dhe revizionimi i dokumenteve
+- Formularët, listat e kontrollit dhe regjistrat
+
+## Struktura
 
 ```text
 LTLINE/
 ├── README.md
 ├── docs/
-│   ├── 00-FOUNDATION.md
-│   ├── 01-COMPANY-PROFILE.md
-│   ├── 02-BUSINESS-PLAN.md
-│   ├── 03-PRODUCT-SYSTEM.md
-│   ├── 04-STANDARD-PROCEDURES.md
-│   ├── 05-QUALITY-HSE.md
-│   ├── 06-PROJECT-MANAGEMENT.md
-│   ├── 07-SALES-PROCUREMENT.md
-│   ├── 08-FINANCIAL-FRAMEWORK.md
-│   ├── 09-EXPORT-READINESS.md
-│   └── 10-DOCUMENT-CONTROL.md
-├── templates/
-│   ├── quotations/
-│   ├── invoices/
-│   ├── project/
-│   ├── procurement/
-│   ├── quality/
-│   └── hr/
+│   ├── 00-FOUNDATION.md ... 10-DOCUMENT-CONTROL.md   # bazë në anglisht
+│   ├── sq/                                           # VERSIONI ZYRTAR SHQIP
+│   │   ├── 00-BAZA-LTLINE.md
+│   │   ├── 01-PROFILI-I-KOMPANISE.md
+│   │   ├── 02-PLANI-I-BIZNESIT.md
+│   │   ├── 03-SISTEMI-I-PRODUKTEVE.md
+│   │   ├── 04-PROCEDURAT-STANDARDE.md
+│   │   ├── 05-CILESI-SIGURIA-MJEDISI.md
+│   │   ├── 06-MENAXHIMI-I-PROJEKTIT.md
+│   │   ├── 07-SHITJE-DHE-PROKURIM.md
+│   │   ├── 08-KUADRI-FINANCIAR.md
+│   │   ├── 09-PERGATITJA-PER-EKSPORT.md
+│   │   └── 10-KONTROLLI-I-DOKUMENTEVE.md
+│   ├── sop/ dhe sops/                                 # SOP operative
+│   └── forms/                                         # Formularë dhe lista kontrolli
 └── assets/
-    ├── branding/
-    ├── diagrams/
-    └── product-media/
 ```
 
-## Current Foundation Context
+## Konteksti fillestar
 
-- **Brand:** LTLINE
-- **Base:** Skenderaj, Kosovo
-- **Initial legal form:** Business Individual (B.I.)
-- **Core areas:** Ventilation, Climate/HVAC, modular homes, villas and PIR panels
-- **Initial project investment framework:** €100,000
-- **Initial operating assumption:** rented premises and 4 workers
-- **Strategic direction:** establish a professional Kosovo operation first, then develop export capability
+- **Marka:** LTLINE
+- **Bazë:** Skenderaj, Kosovë
+- **Forma fillestare:** Biznes Individual (B.I.)
+- **Fushat:** Ventilim, Klimë/HVAC, shtëpi modulare, vila dhe panele PIR
+- **Investim fillestar i planifikimit:** 100,000 €
+- **Supozim fillestar:** hapësirë me qira dhe 4 punëtorë
 
-## Documentation Principles
+Të dhënat e mësipërme që nuk janë ende të konfirmuara juridikisht ose financiarisht trajtohen si të dhëna planifikimi.
 
-1. Every controlled document receives a clear identifier and revision.
-2. Technical claims and product specifications must be traceable to reliable source documentation.
-3. Financial figures must be separated into assumptions, actuals and forecasts.
-4. Operational procedures must be practical and auditable.
-5. Safety and quality requirements apply throughout procurement, production, installation and after-sales service.
-6. Export documentation will be developed as a separate readiness layer rather than assumed from the beginning.
+## Parimet e dokumentacionit
 
-## Status
+1. Çdo dokument i kontrolluar ka ID dhe revizion.
+2. Specifikimet teknike duhet të jenë të gjurmueshme.
+3. Supozimet nuk paraqiten si fakte.
+4. Procedurat duhet të jenë praktike dhe të auditueshme.
+5. Cilësia dhe siguria zbatohen në të gjitha fazat.
+6. Dokumentet e miratuara janë referenca operative; versionet e vjetra arkivohen.
 
-**Foundation phase — active development**
+## Statuset në shqip
 
-The repository will be expanded module by module. Documents should be considered controlled working documents until their status is explicitly marked as approved.
+- `PROJEKT` — në përgatitje
+- `SHQYRTIM` — për kontroll
+- `MIRATUAR` — për përdorim zyrtar
+- `ARKIVUAR` — version i zëvendësuar
 
-## Document Status Convention
+## Pronësia
 
-- `DRAFT` — under development
-- `REVIEW` — ready for internal review
-- `APPROVED` — approved for operational use
-- `ARCHIVED` — superseded or retired
-
-## License / Ownership
-
-LTLINE documentation is proprietary unless a document explicitly states otherwise.
+Dokumentacioni i LTLINE është pronë e LTLINE, përveç rasteve kur një dokument përcakton ndryshe.
 
 ---
 
