@@ -1,9 +1,10 @@
-# LTLINE — Indeksi i Dokumentacionit
+# LTLINE — INDEKSI QENDROR I DOKUMENTACIONIT
 
+**Versioni:** 1.0.0  
 **Gjuha kryesore:** Shqip  
-**Statusi:** DRAFT / në zhvillim
+**Statusi:** DRAFT / Në zhvillim
 
-## 1. Dokumentet bazë
+## 1. Dokumentet themelore
 
 - [00 — Baza e LTLINE](00-BAZA-LTLINE.md)
 - [01 — Profili i Kompanisë](01-PROFILI-I-KOMPANISE.md)
@@ -17,7 +18,7 @@
 - [09 — Përgatitja për Eksport](09-PERGATITJA-PER-EKSPORT.md)
 - [10 — Kontrolli i Dokumenteve](10-KONTROLLI-I-DOKUMENTEVE.md)
 
-## 2. Procedurat Operative
+## 2. Procedurat operative
 
 - [SOP-001 — Kërkesa e klientit deri te oferta](sops/LTLINE-SOP-001-KERKESA-E-KLIENTIT-DERI-TE-OFERTA.md)
 - [SOP-002 — Prokurimi](sops/LTLINE-SOP-002-PROKURIMI.md)
@@ -30,6 +31,13 @@
 
 Këtu ruhen formularët, listat e kontrollit dhe regjistrat e përdorimit të përditshëm.
 
-## 4. Rregull
+## 4. Statuset e dokumenteve
 
-Ky indeks është pika hyrëse e dokumentacionit shqiptar. Dokumentet që janë ende në `DRAFT` nuk konsiderohen të miratuara për përdorim zyrtar.
+- `PROJEKT` — dokument në zhvillim
+- `SHQYRTIM` — gati për shqyrtim
+- `MIRATUAR` — version zyrtar për përdorim
+- `ARKIVUAR` — version i zëvendësuar
+
+## 5. Rregulli i kontrollit
+
+Ky indeks është pika hyrëse e dokumentacionit shqiptar. Çdo dokument i ri duhet të regjistrohet këtu dhe të ketë ID, revision dhe status të qartë. Dokumentet në `PROJEKT` ose `SHQYRTIM` nuk konsiderohen të miratuara për përdorim zyrtar.
