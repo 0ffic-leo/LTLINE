@@ -1,18 +1,34 @@
 # LTLINE-FRM-008 — Hapja e projektit
 
-**ID:** LTLINE-FRM-008 | **Revizioni:** 1.0 | **Statusi:** PROJEKT
+**ID:** LTLINE-FRM-008 | **Revizioni:** 1.1 | **Statusi:** PROJEKT
 
-**Kodi i projektit:** ______  **Klienti:** ______  **Lokacioni:** ______
+## Të dhënat e projektit
 
-- [ ] Oferta/kontrata e miratuar
-- [ ] Objekti i punës i përcaktuar
-- [ ] Përjashtimet e përcaktuara
-- [ ] Planet/specifikimet në dosje
-- [ ] Buxheti i vendosur
-- [ ] Afati i përcaktuar
-- [ ] Prokurimi i planifikuar
-- [ ] Personat përgjegjës caktuar
-- [ ] Kërkesat e sigurisë shqyrtuar
-- [ ] Kërkesat e dorëzimit përcaktuar
+| Fusha | Të dhënat |
+|---|---|
+| Kodi i projektit | TBD |
+| Klienti | TBD |
+| Lokacioni | TBD |
+| Menaxheri i projektit | TBD |
+| Oferta / kontrata | TBD |
+| Objekti i punës | TBD |
+| Përjashtimet | TBD |
+| Buxheti | TBD |
+| Afati | TBD |
 
-**Menaxheri i projektit:** ______  **Data e hapjes:** ______
+## Kontrolli para hapjes
+
+- [ ] Oferta / kontrata është miratuar.
+- [ ] Objekti i punës është përcaktuar.
+- [ ] Planet / specifikimet janë në dosje.
+- [ ] Buxheti është vendosur.
+- [ ] Afati është përcaktuar.
+- [ ] Prokurimi është planifikuar.
+- [ ] Personat përgjegjës janë caktuar.
+- [ ] Kërkesat e sigurisë janë shqyrtuar.
+- [ ] Kërkesat e dorëzimit janë përcaktuar.
+
+**Përgatiti:** TBD  
+**Shqyrtoi:** TBD  
+**Miratoi:** TBD  
+**Data e hapjes:** TBD
