@@ -1,0 +1,45 @@
+name: Build LTLINE Word Pack
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-word-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Build Word documents from Albanian Markdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf word-pack
+          mkdir -p word-pack
+          find docs/sq -type f -name '*.md' -print0 | while IFS= read -r -d '' file; do
+            rel="${file#docs/sq/}"
+            out="word-pack/${rel%.md}.docx"
+            mkdir -p "$(dirname "$out")"
+            pandoc "$file" -o "$out" --from=gfm --toc
+          done
+          cp README.md word-pack/README-LTLINE.md
+          printf '%s\n' '# LTLINE — Word Pack' '' 'Ky paketë u gjenerua automatikisht nga dokumentacioni aktual në docs/sq/.' > word-pack/README-WORD-PACK.md
+          find word-pack -type f -name '*.docx' -print | sort > word-pack/FILE-LIST.txt
+          cd word-pack
+          zip -r ../LTLINE-Foundation-Pack-Word-SQ.zip .
+
+      - name: Upload Word pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: LTLINE-Foundation-Pack-Word-SQ
+          path: LTLINE-Foundation-Pack-Word-SQ.zip
+          if-no-files-found: error
+          retention-days: 30
