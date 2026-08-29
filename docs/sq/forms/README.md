@@ -1,24 +1,35 @@
 # LTLINE — Formularët
 
-Kjo dosje është burimi kanonik për formularët në shqip.
+**Burimi kanonik:** `docs/sq/forms/`  
+**Gjuha:** Shqip  
+**Revizioni i indeksit:** 1.1  
+**Statusi:** PROJEKT
 
-| ID | Formulari | Përdorimi |
-|---|---|---|
-| FRM-001 | Informacioni i klientit | Identifikimi i klientit |
-| FRM-002 | Oferta | Përgatitja dhe dërgimi i ofertës |
-| FRM-003 | Porosia e blerjes | Blerjet |
-| FRM-004 | Vizita në objekt | Mbledhja e të dhënave në terren |
-| FRM-005 | Dorëzimi i projektit | Kalimi i projektit |
-| FRM-006 | Vlerësimi i furnitorit | Kualifikimi i furnitorit |
-| FRM-007 | Kalkulimi i ofertës | Kosto dhe çmim |
-| FRM-008 | Hapja e projektit | Aktivizimi i projektit |
-| FRM-009 | Raporti ditor | Evidenca e punës |
-| FRM-010 | Lista e kontrollit të instalimit | Kontroll teknik |
-| FRM-011 | Komisionimi | Testimi final |
-| FRM-012 | Raporti i mospërputhshmërisë | NC |
-| FRM-013 | Masa korrigjuese | CAPA |
-| FRM-014 | Kërkesa e garancisë | Garanci |
-| FRM-015 | Raporti i shërbimit | Pas-shitje |
-| FRM-016 | Regjistri kryesor i produktit | Identifikimi teknik |
+Këta formularë janë evidencë e proceseve LTLINE dhe duhet të lidhen me ID-në e klientit, ofertës, projektit, produktit ose dokumentit përkatës kur aplikohet.
 
-**Rregull:** formularët plotësohen si evidencë e procesit dhe lidhen me ID-në e projektit, klientit, produktit ose dokumentit përkatës kur aplikohet.
+| ID | Formulari | Procesi | Dokumenti / SOP lidhës |
+|---|---|---|---|
+| FRM-001 | Informacioni i klientit | Klient / shitje | SOP-001 |
+| FRM-002 | Oferta | Shitje | SOP-001 |
+| FRM-003 | Porosia e blerjes | Prokurim | SOP-002 |
+| FRM-004 | Vizita në objekt | Projekt / teknikë | SOP-004 |
+| FRM-005 | Dorëzimi i projektit | Dorëzim | SOP-005 |
+| FRM-006 | Vlerësimi i furnitorit | Prokurim | SOP-002 |
+| FRM-007 | Kalkulimi i ofertës | Shitje / financë | SOP-001 |
+| FRM-008 | Hapja e projektit | Projekt | SOP-004 |
+| FRM-009 | Raporti ditor | Projekt / instalim | SOP-005 |
+| FRM-010 | Lista e kontrollit të instalimit | Instalimi | SOP-005 |
+| FRM-011 | Komisionimi | Testim / dorëzim | SOP-005 |
+| FRM-012 | Raporti i mospërputhshmërisë | Cilësi | SOP-003 / SOP-005 |
+| FRM-013 | Masa korrigjuese dhe parandaluese | Cilësi | SOP-003 / SOP-005 |
+| FRM-014 | Kërkesa e garancisë | Garanci | SOP-006 |
+| FRM-015 | Raporti i shërbimit | Pas-shitje | SOP-006 |
+| FRM-016 | Regjistri kryesor i produktit | Produkte / teknikë | SOP-003 |
+
+## Rregulli i përdorimit
+
+1. Formulari plotësohet në momentin e procesit.
+2. Identifikohet dokumenti/projekti me të cilin lidhet.
+3. Evidenca ruhet në vendin e përcaktuar nga kontrolli i dokumenteve.
+4. Ndryshimet pas plotësimit duhet të jenë të gjurmueshme.
+5. Formularët nuk zëvendësojnë dokumentet teknike, kontratat ose kërkesat ligjore.
