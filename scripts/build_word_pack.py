@@ -33,7 +33,9 @@ def field(p,code):
 
 def style_doc(doc):
     for name,size,bold in [('Normal',10.5,False),('Title',22,True),('Heading 1',15,True),('Heading 2',12.5,True),('Heading 3',11,True)]:
-        st=doc.styles[name]; st.font.name='Aptos'; st.font.size=Pt(size); st.font.bold=bold
+        try: st=doc.styles[name]
+        except KeyError: st=doc.styles.add_style(name,1 if name=='Normal' else 2)
+        st.font.name='Aptos'; st.font.size=Pt(size); st.font.bold=bold
     s=doc.sections[0]; s.top_margin=Cm(2.8); s.bottom_margin=Cm(2.1); s.left_margin=Cm(2.2); s.right_margin=Cm(2.2); s.header_distance=Cm(.7); s.footer_distance=Cm(.8)
 
 def add_branding(doc,title,doc_id,rev,status):
@@ -51,9 +53,7 @@ def add_branding(doc,title,doc_id,rev,status):
     rr=p.add_run(' nga '); rr.font.size=Pt(8); field(p,'NUMPAGES'); rr=p.add_run('  |  Dokumentacioni zyrtar LTLINE'); rr.font.size=Pt(8)
 
 def insert_control_block_first(doc,title,doc_id,rev,status):
-    body=doc._element.body
-    anchor=body.find(qn('w:sectPr'))
-    nodes=[]
+    body=doc._element.body; nodes=[]
     p=doc.add_paragraph(); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.add_run('LTLINE').bold=True; nodes.append(p._p)
     p=doc.add_paragraph(style='Title'); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.add_run(title.upper()); nodes.append(p._p)
     p=doc.add_paragraph(); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; rr=p.add_run(f'{doc_id}  •  Revizioni {rev}  •  {status}'); rr.bold=True; rr.font.size=Pt(10); nodes.append(p._p)
@@ -63,10 +63,8 @@ def insert_control_block_first(doc,title,doc_id,rev,status):
         for j,v in enumerate(row):
             c=ct.cell(i,j); c.text=v; c.vertical_alignment=WD_CELL_VERTICAL_ALIGNMENT.CENTER
             for run in c.paragraphs[0].runs: run.font.size=Pt(8.5); run.bold=(j%2==0)
-    nodes.append(ct._tbl)
-    p=doc.add_paragraph(); nodes.append(p._p)
-    for node in nodes:
-        body.remove(node)
+    nodes.extend([ct._tbl,doc.add_paragraph()._p])
+    for node in nodes: body.remove(node)
     for node in nodes: body.insert(0,node)
 
 def build(md_file,out):
