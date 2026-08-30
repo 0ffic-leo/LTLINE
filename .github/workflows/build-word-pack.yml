@@ -15,26 +15,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
-
-      - name: Build Word documents from Albanian Markdown
-        shell: bash
+      - name: Install Python dependencies
         run: |
-          set -euo pipefail
-          rm -rf word-pack
-          mkdir -p word-pack
-          find docs/sq -type f -name '*.md' -print0 | while IFS= read -r -d '' file; do
-            rel="${file#docs/sq/}"
-            out="word-pack/${rel%.md}.docx"
-            mkdir -p "$(dirname "$out")"
-            pandoc "$file" -o "$out" --from=gfm --toc
-          done
-          cp README.md word-pack/README-LTLINE.md
-          printf '%s\n' '# LTLINE — Word Pack' '' 'Ky paketë u gjenerua automatikisht nga dokumentacioni aktual në docs/sq/.' > word-pack/README-WORD-PACK.md
-          find word-pack -type f -name '*.docx' -print | sort > word-pack/FILE-LIST.txt
-          cd word-pack
-          zip -r ../LTLINE-Foundation-Pack-Word-SQ.zip .
+          python -m pip install --upgrade pip
+          pip install python-docx
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+
+      - name: Build professional Word documents
+        run: python scripts/build_word_pack.py
 
       - name: Upload Word pack
         uses: actions/upload-artifact@v4
