@@ -1,118 +1,81 @@
-import base64
-import re
-import subprocess
 from pathlib import Path
+import base64, re, shutil, subprocess, zipfile
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
 from docx.shared import Cm, Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
-LOGO_B64 = """__LOGO__"""
-ROOT = Path("docs/sq")
-OUT = Path("word-pack")
-LOGO = Path("/tmp/ltline-logo.png")
+ROOT=Path('docs/sq'); OUT=Path('word-pack'); LOGO=Path('/tmp/ltline-logo.png')
+LOGO_B64=Path('assets/ltline-logo.png.b64').read_text(encoding='utf-8').strip()
 
-def set_cell_margins(cell, top=80, start=80, bottom=80, end=80):
-    tcPr = cell._tc.get_or_add_tcPr()
-    tcMar = tcPr.first_child_found_in("w:tcMar")
-    if tcMar is None:
-        tcMar = OxmlElement("w:tcMar")
-        tcPr.append(tcMar)
-    for m, v in (("top", top), ("start", start), ("bottom", bottom), ("end", end)):
-        node = tcMar.find(qn(f"w:{m}"))
-        if node is None:
-            node = OxmlElement(f"w:{m}")
-            tcMar.append(node)
-        node.set(qn("w:w"), str(v))
-        node.set(qn("w:type"), "dxa")
+def meta(md):
+    def g(key, default):
+        m=re.search(rf'\*\*{re.escape(key)}\*\*\s*:\s*([^|\n]+)',md,re.I)
+        return m.group(1).strip() if m else default
+    m=re.search(r'^#\s+(.+)$',md,re.M); title=m.group(1).strip() if m else 'LTLINE'
+    title=re.sub(r'^LTLINE\s*[—-]\s*','',title).strip()
+    return title,g('ID','TBD'),g('Revizioni','1.0'),g('Statusi','PROJEKT')
 
-def remove_table_borders(table):
-    tblPr = table._tbl.tblPr
-    borders = tblPr.first_child_found_in("w:tblBorders")
-    if borders is None:
-        borders = OxmlElement("w:tblBorders")
-        tblPr.append(borders)
-    for edge in ("top", "left", "bottom", "right", "insideH", "insideV"):
-        el = borders.find(qn(f"w:{edge}"))
-        if el is None:
-            el = OxmlElement(f"w:{edge}")
-            borders.append(el)
-        el.set(qn("w:val"), "nil")
+def borderless(table):
+    pr=table._tbl.tblPr; b=OxmlElement('w:tblBorders')
+    for e in ('top','left','bottom','right','insideH','insideV'):
+        x=OxmlElement('w:'+e); x.set(qn('w:val'),'nil'); b.append(x)
+    pr.append(b)
 
-def add_page_field(paragraph):
-    paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    run = paragraph.add_run("Faqja ")
-    run.font.size = Pt(8)
-    fld = OxmlElement("w:fldSimple")
-    fld.set(qn("w:instr"), "PAGE")
-    paragraph._p.append(fld)
-    run = paragraph.add_run(" nga ")
-    run.font.size = Pt(8)
-    fld2 = OxmlElement("w:fldSimple")
-    fld2.set(qn("w:instr"), "NUMPAGES")
-    paragraph._p.append(fld2)
+def field(p,code):
+    f=OxmlElement('w:fldSimple'); f.set(qn('w:instr'),code); p._p.append(f)
 
-def metadata(md):
-    title = "LTLINE"
-    m = re.search(r"^#\s+(.+)$", md, re.M)
-    if m:
-        title = re.sub(r"^LTLINE\s*[—-]\s*", "", m.group(1)).strip()
-    def grab(patterns, default):
-        for pattern in patterns:
-            m = re.search(pattern, md, re.I)
-            if m: return m.group(1).strip()
-        return default
-    return title, grab([r"\*\*ID(?: e dokumentit)?\s*:??\*\*\s*([^|\n]+)", r"\*\*ID\*\*\s*:??\s*([^|\n]+)"], "TBD"), grab([r"\*\*Revizioni\*\*\s*:??\s*([^|\n]+)"], "1.0"), grab([r"\*\*Statusi\*\*\s*:??\s*([^|\n]+)"], "PROJEKT")
-
-def style_document(doc):
-    styles = doc.styles
-    styles["Normal"].font.name = "Aptos"
-    styles["Normal"].font.size = Pt(10.5)
-    for name, size in (("Title",20),("Heading 1",16),("Heading 2",13),("Heading 3",11)):
-        styles[name].font.name = "Aptos"
-        styles[name].font.size = Pt(size)
-        styles[name].font.bold = True
-    sec = doc.sections[0]
-    sec.top_margin = Cm(2.4); sec.bottom_margin = Cm(2.0); sec.left_margin = Cm(2.2); sec.right_margin = Cm(2.2)
-    sec.header_distance = Cm(0.8); sec.footer_distance = Cm(0.8)
-
-def brand_document(path, md_text):
-    doc = Document(path); style_document(doc)
-    title, doc_id, rev, status = metadata(md_text)
-    sec = doc.sections[0]
-    header = sec.header
-    table = header.add_table(rows=1, cols=2, width=Cm(16.6))
-    remove_table_borders(table)
-    left, right = table.rows[0].cells
-    for cell in (left, right):
-        cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
-        set_cell_margins(cell, 40, 40, 40, 40)
-    lp = left.paragraphs[0]
-    lr = lp.add_run(); lr.add_picture(str(LOGO), width=Cm(1.7))
-    rp = right.paragraphs[0]; rp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    r = rp.add_run("LTLINE\n"); r.bold = True; r.font.size = Pt(10)
-    r = rp.add_run(title + "\n"); r.bold = True; r.font.size = Pt(9)
-    r = rp.add_run(f"ID: {doc_id}  |  Revizion: {rev}  |  Status: {status}"); r.font.size = Pt(8)
-    footer = sec.footer
-    fp = footer.paragraphs[0]; fp.text = "LTLINE — Dokument i Kontrolluar"; fp.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    for run in fp.runs: run.font.size = Pt(8)
-    add_page_field(footer.add_paragraph())
-    doc.save(path)
+def build(md_file,out):
+    md=md_file.read_text(encoding='utf-8'); title,doc_id,rev,status=meta(md)
+    subprocess.run(['pandoc',str(md_file),'-o',str(out),'--from=gfm'],check=True)
+    doc=Document(out); sec=doc.sections[0]
+    sec.top_margin=Cm(2.8); sec.bottom_margin=Cm(2.1); sec.left_margin=Cm(2.2); sec.right_margin=Cm(2.2)
+    sec.header_distance=Cm(.7); sec.footer_distance=Cm(.8)
+    for name,size,bold in [('Normal',10.5,False),('Title',22,True),('Heading 1',15,True),('Heading 2',12.5,True),('Heading 3',11,True)]:
+        st=doc.styles[name]; st.font.name='Aptos'; st.font.size=Pt(size); st.font.bold=bold
+    # Header
+    h=sec.header; t=h.add_table(rows=1,cols=2,width=Cm(16.6)); t.alignment=WD_TABLE_ALIGNMENT.CENTER; borderless(t)
+    l,r=t.rows[0].cells; l.vertical_alignment=r.vertical_alignment=WD_CELL_VERTICAL_ALIGNMENT.CENTER
+    p=l.paragraphs[0]; rr=p.add_run(); rr.add_picture(str(LOGO),width=Cm(2.4))
+    p=r.paragraphs[0]; p.alignment=WD_ALIGN_PARAGRAPH.RIGHT
+    rr=p.add_run('LTLINE\n'); rr.bold=True; rr.font.size=Pt(12)
+    rr=p.add_run(title.upper()+'\n'); rr.bold=True; rr.font.size=Pt(8.5)
+    rr=p.add_run(f'ID: {doc_id}  |  Revizioni: {rev}  |  Statusi: {status}'); rr.font.size=Pt(8)
+    # Header separator
+    p=h.add_paragraph(); pr=p._p.get_or_add_pPr(); pb=OxmlElement('w:pBdr'); bot=OxmlElement('w:bottom'); bot.set(qn('w:val'),'single'); bot.set(qn('w:sz'),'8'); bot.set(qn('w:space'),'1'); pb.append(bot); pr.append(pb)
+    # Footer
+    f=sec.footer; p=f.paragraphs[0]; p.alignment=WD_ALIGN_PARAGRAPH.CENTER
+    rr=p.add_run(f'LTLINE — Dokument i Kontrolluar  |  Revizioni {rev}  |  Faqja '); rr.font.size=Pt(8); field(p,'PAGE')
+    rr=p.add_run(' nga '); rr.font.size=Pt(8); field(p,'NUMPAGES'); rr=p.add_run('  |  Dokumentacioni zyrtar LTLINE'); rr.font.size=Pt(8)
+    # Insert controlled title block at beginning
+    body=doc._element.body
+    first=body.find(qn('w:sectPr'))
+    cover=doc.add_paragraph(); cover.alignment=WD_ALIGN_PARAGRAPH.CENTER; cover.add_run('LTLINE').bold=True
+    p=doc.add_paragraph(style='Title'); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.add_run(title.upper())
+    p=doc.add_paragraph(); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; rr=p.add_run(f'{doc_id}  •  Revizioni {rev}  •  {status}'); rr.bold=True; rr.font.size=Pt(10)
+    ct=doc.add_table(rows=4,cols=4); ct.style='Table Grid'; ct.alignment=WD_TABLE_ALIGNMENT.CENTER
+    vals=[('ID e dokumentit',doc_id,'Revizioni',rev),('Statusi',status,'Data','TBD'),('Përgatiti','TBD','Shqyrtoi','TBD'),('Miratoi','TBD','Data e hyrjes në fuqi','TBD')]
+    for i,row in enumerate(vals):
+        for j,v in enumerate(row):
+            cell=ct.cell(i,j); cell.text=v
+            for run in cell.paragraphs[0].runs: run.font.size=Pt(8.5); run.bold=(j%2==0)
+    doc.add_paragraph()
+    doc.save(out)
 
 def main():
     LOGO.write_bytes(base64.b64decode(LOGO_B64))
-    import shutil
     if OUT.exists(): shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
-    for md_file in sorted(ROOT.rglob("*.md")):
-        rel = md_file.relative_to(ROOT); out = OUT / rel.with_suffix(".docx")
-        out.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run(["pandoc", str(md_file), "-o", str(out), "--from=gfm", "--toc"], check=True)
-        brand_document(out, md_file.read_text(encoding="utf-8"))
-    (OUT / "README-WORD-PACK.md").write_text("# LTLINE — Word Pack\n\nPaketë Word e gjeneruar nga docs/sq me standard të përbashkët LTLINE.\n", encoding="utf-8")
-    with (OUT / "FILE-LIST.txt").open("w", encoding="utf-8") as f:
-        for p in sorted(OUT.rglob("*.docx")): f.write(str(p.relative_to(OUT)) + "\n")
-
-if __name__ == "__main__": main()
+    for md in sorted(ROOT.rglob('*.md')):
+        out=(OUT/md.relative_to(ROOT)).with_suffix('.docx'); out.parent.mkdir(parents=True,exist_ok=True); build(md,out)
+    (OUT/'README-WORD-PACK.md').write_text('# LTLINE — Word Pack\n\nPaketë Word e gjeneruar nga dokumentacioni shqiptar `docs/sq/`. Çdo dokument përdor identitetin standard LTLINE: logo, header, footer, ID, revizion, status dhe bllok kontrolli.\n',encoding='utf-8')
+    (OUT/'FILE-LIST.txt').write_text('\n'.join(str(p.relative_to(OUT)) for p in sorted(OUT.rglob('*.docx')))+'\n',encoding='utf-8')
+    z=Path('LTLINE-Foundation-Pack-Word-SQ.zip')
+    if z.exists(): z.unlink()
+    with zipfile.ZipFile(z,'w',zipfile.ZIP_DEFLATED) as a:
+        for p in OUT.rglob('*'):
+            if p.is_file(): a.write(p,p.relative_to(OUT))
+    LOGO.unlink(missing_ok=True)
+if __name__=='__main__': main()
