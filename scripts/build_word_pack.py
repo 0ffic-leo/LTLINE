@@ -9,7 +9,7 @@ from docx.oxml.ns import qn
 
 ROOT=Path('docs/sq'); OUT=Path('word-pack'); LOGO=Path('/tmp/ltline-logo.png')
 LOGO_B64=Path('assets/ltline-logo.png.b64').read_text(encoding='utf-8').strip()
-BUILD_DATE='30.08.2026'
+BUILD_DATE='31.08.2026'
 
 def meta(md):
     def g(key, default):
@@ -26,6 +26,12 @@ def borderless(table):
     pr=table._tbl.tblPr; b=OxmlElement('w:tblBorders')
     for e in ('top','left','bottom','right','insideH','insideV'):
         x=OxmlElement('w:'+e); x.set(qn('w:val'),'nil'); b.append(x)
+    pr.append(b)
+
+def grid(table):
+    pr=table._tbl.tblPr; b=OxmlElement('w:tblBorders')
+    for e in ('top','left','bottom','right','insideH','insideV'):
+        x=OxmlElement('w:'+e); x.set(qn('w:val'),'single'); x.set(qn('w:sz'),'4'); x.set(qn('w:space'),'0'); b.append(x)
     pr.append(b)
 
 def field(p,code):
@@ -57,7 +63,7 @@ def insert_control_block_first(doc,title,doc_id,rev,status):
     p=doc.add_paragraph(); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.add_run('LTLINE').bold=True; nodes.append(p._p)
     p=doc.add_paragraph(style='Title'); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; p.add_run(title.upper()); nodes.append(p._p)
     p=doc.add_paragraph(); p.alignment=WD_ALIGN_PARAGRAPH.CENTER; rr=p.add_run(f'{doc_id}  •  Revizioni {rev}  •  {status}'); rr.bold=True; rr.font.size=Pt(10); nodes.append(p._p)
-    ct=doc.add_table(rows=4,cols=4); ct.style='Table Grid'; ct.alignment=WD_TABLE_ALIGNMENT.CENTER
+    ct=doc.add_table(rows=4,cols=4); grid(ct); ct.alignment=WD_TABLE_ALIGNMENT.CENTER
     vals=[('ID e dokumentit',doc_id,'Revizioni',rev),('Statusi',status,'Data',BUILD_DATE),('Përgatiti','TBD','Shqyrtoi','TBD'),('Miratoi','TBD','Data e hyrjes në fuqi','TBD')]
     for i,row in enumerate(vals):
         for j,v in enumerate(row):
