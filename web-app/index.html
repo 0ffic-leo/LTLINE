@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LTLINE Service</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">⌃</div><div><strong>LTLINE</strong><small>LINE FOR ALL</small></div></div>
+    <div class="service-name">LTLINE SERVICE</div>
+    <nav id="nav">
+      <button class="nav-item active" data-view="dashboard">▣ <span>Dashboard</span></button>
+      <button class="nav-item" data-view="qr">⌗ <span>Skano QR</span></button>
+      <button class="nav-item" data-view="projects">⌂ <span>Projektet / Objektet</span></button>
+      <button class="nav-item" data-view="products">▤ <span>Produktet</span></button>
+      <button class="nav-item" data-view="assets">⚙ <span>Pajisje & Asetet</span></button>
+      <button class="nav-item" data-view="warranty">◈ <span>Garancitë</span></button>
+      <button class="nav-item" data-view="services">🔧 <span>Shërbimet</span></button>
+      <button class="nav-item" data-view="maintenance">◷ <span>Mirëmbajtja</span></button>
+      <button class="nav-item" data-view="history">◴ <span>Historiku</span></button>
+      <button class="nav-item" data-view="documents">▧ <span>Dokumentet</span></button>
+      <button class="nav-item" data-view="clients">♙ <span>Klientët</span></button>
+    </nav>
+    <div class="help">NEVOJITET NDIHMË?<br><small>Kontakto ekipin e mirëmbajtjes</small><button id="contactBtn">KONTAKTO LTLINE</button></div>
+    <footer>© 2026 LTLINE<br><small>Të gjitha të drejtat e rezervuara.</small></footer>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><button id="menuBtn">☰</button><h1 id="pageTitle">Dashboard</h1><div class="user">◉ <span>Leonard Tahiraj<br><small>Administrator</small></span></div></header>
+    <div id="app" class="content"></div>
+  </main>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
