@@ -3,5 +3,5 @@
 // NEVER place a service_role/secret key in this file.
 window.LTLINE_SUPABASE = {
   url: 'https://tlikdvhdwlhdcmkgrevo.supabase.co',
-  anonKey: 'O2SJl97F0SEzkWXNV3aVKw_RBZTGuak'
+  anonKey: 'sb_publishable_O2SJl97F0SEzkWXNV3aVKw_RBZTGuak'
 };
